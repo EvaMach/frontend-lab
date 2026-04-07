@@ -1,18 +1,14 @@
 ---
 description: "Research latest React/TS features and generate demos + quiz tasks. Triggers when user asks what to learn next or wants to explore a new frontend feature."
 argument-hint: "[topic] (e.g., 'react useActionState', 'typescript satisfies') — leave empty to auto-suggest"
-context: fork
 allowed-tools:
   - Read
-  - Write
-  - Edit
   - Glob
   - Grep
-  - Bash
   - WebSearch
   - WebFetch
-  - Agent
   - AskUserQuestion
+  - Agent
 ---
 
 You are a research-and-generate pipeline for a frontend learning lab. Your job is to find a new React or TypeScript feature to learn, then produce a working demo and a quiz task file.
@@ -36,9 +32,8 @@ Store the covered-topic list for dedup.
 **If no arguments** (auto-suggest mode):
 1. Use `WebSearch` to find the latest React and TypeScript features:
    - Search for "React 19 new features 2025 2026" and "TypeScript 5.x new features 2025 2026"
-   - If `mcp__context7__*` tools are available, also query context7 for React and TypeScript documentation
 2. Filter out topics already covered in the repo.
-3. Present 3–5 suggestions to the user via `AskUserQuestion`, each with a one-line description.
+3. Do NOT output any intermediate thinking, search results, sources, or commentary. Go straight to `AskUserQuestion` with exactly 5 numbered suggestions. Each suggestion should have: **`Name`** (version) — one sentence description. Nothing else — no sources, no preamble, no "let me ask" text.
 4. Let the user pick one.
 
 ## Phase 3: Classify the topic
@@ -48,21 +43,21 @@ Determine whether this topic is:
 - **typescript** — a type-system feature or pattern → produces `.ts` exercise + task `.md`
 - **both** — a React feature that also showcases TS generics/patterns → produces all three files
 
-## Phase 4: Spawn two agents in parallel
+## Phase 4: Spawn subagents
 
-Launch both agents in a single message using the Agent tool. Provide each with the FULL prompt from the supporting template files.
+Launch two Agent tool calls in a single message to run both subagents in parallel. Reference each agent by name — Claude will route to the custom subagent defined in `.claude/agents/`.
 
-### Agent 1: Demo/Exercise Maker
+### demo-maker
 
-Read the template from `.claude/skills/research/demo-maker-prompt.md` and substitute TOPIC_NAME and the topic type. Send this as the Agent prompt.
+> Use the demo-maker agent to create a learning demo for the topic "TOPIC_NAME". Topic type: TOPIC_TYPE.
 
-### Agent 2: Task Maker
+### task-maker
 
-Read the template from `.claude/skills/research/task-maker-prompt.md` and substitute TOPIC_NAME and the topic type. Send this as the Agent prompt.
+> Use the task-maker agent to create a task file for the topic "TOPIC_NAME". Topic type: TOPIC_TYPE. The demo/exercise file will be at: `src/demos/<TopicName>Demo.jsx` (or `src/exercises/<topic-kebab>.ts`).
 
 ## Phase 5: Auto-register in App.jsx (React demos only)
 
-After BOTH agents complete, verify the expected files were created using `Glob`.
+After BOTH subagents complete, verify the expected files were created using `Glob`.
 
 If a React demo `.jsx` file was created in `src/demos/`:
 
@@ -77,7 +72,7 @@ If a React demo `.jsx` file was created in `src/demos/`:
    ```
 4. Use the `Edit` tool for both insertions.
 
-If the demo file was NOT created (agent failed), report the error and provide manual registration instructions. Do NOT leave App.jsx in a half-modified state.
+If the demo file was NOT created (subagent failed), report the error and provide manual registration instructions. Do NOT leave App.jsx in a half-modified state.
 
 **Skip registration entirely for TypeScript-only topics.**
 

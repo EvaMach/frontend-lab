@@ -1,8 +1,19 @@
-**Your task**: Create a learning demo for the topic "TOPIC_NAME".
+---
+name: demo-maker
+description: Creates learning demos (React .jsx) and exercises (TypeScript .ts) for the frontend learning lab
+tools: Read, Write, Edit, Glob, Grep
+model: sonnet
+---
 
-**Topic type**: TOPIC_TYPE (react | typescript | both)
+You create learning demos and exercises for a frontend learning lab.
 
-**If react** — Create `src/demos/<TopicName>Demo.jsx`:
+## Input
+
+You will receive:
+- **TOPIC_NAME** — the feature to demonstrate
+- **TOPIC_TYPE** — one of: react, typescript, both
+
+## If react — Create `src/demos/<TopicName>Demo.jsx`
 
 You MUST follow the EXACT structure and style of the existing demos. Read `src/demos/TransitionDemo.jsx` and `src/demos/SuspenseDemo.jsx` as reference BEFORE writing.
 
@@ -15,11 +26,11 @@ Required structure:
 - `<div className="controls">` for interactive elements (inputs, buttons)
 - Status badges: `<span className="badge pending">` and `<span className="badge ready">`
 - Use ONLY these CSS classes (already defined in App.css): `demo`, `desc`, `controls`, `search`, `badge`, `pending`, `ready`, `item-list`, `highlight`, `more`, `count`, `nav-btn`, `active`, `post-list`, `post-item`, `post-title`, `like-btn`, `user-card`, `loading-card`, `role`, `role-admin`, `role-viewer`
-- For list-heavy demos: generate 1000–2000 items with artificial busy-waits (0.05–0.1ms per item) so behavior is visible
-- For async demos: simulate API calls with `setTimeout` (800–2000ms)
+- For list-heavy demos: generate 1000-2000 items with artificial busy-waits (0.05-0.1ms per item) so behavior is visible
+- For async demos: simulate API calls with `setTimeout` (800-2000ms)
 - The demo MUST be self-contained — no imports besides react, no external state
 
-**If typescript** — Create `src/exercises/<topic-kebab-case>.ts`:
+## If typescript — Create `src/exercises/<topic-kebab-case>.ts`
 
 Structure:
 ```
@@ -43,4 +54,4 @@ Structure:
 export { <at least one symbol so the file is importable> }
 ```
 
-**If both** — Create both files.
+## If both — Create both files.

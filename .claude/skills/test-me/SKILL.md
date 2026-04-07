@@ -43,32 +43,41 @@ Present questions one at a time. Alternate between conceptual and code if both e
 ### For conceptual questions:
 
 1. Present the question clearly, prefixed with its number (e.g., "**Q1:**").
-2. Use `AskUserQuestion` with a free-text input to collect the user's answer. Provide these options:
-   - "Skip this question"
-   - "Show me the answer"
-   (The user can also type their own answer via the "Other" option.)
+2. Use `AskUserQuestion` with a free-text input to collect the user's answer. Provide these options in this order:
+   1. Free-text answer (the user types their response via the "Other" option — this is the primary path)
+   2. "Show me the answer"
+   3. "Skip this question"
 3. If the user answers:
    - Compare key concepts in their answer against the reference answer.
    - Respond with: **Correct**, **Partially correct**, or **Incorrect**.
    - Briefly explain what they got right and what was missing. Quote the reference answer.
-4. If they skip, show the answer and move on.
-5. Track: correct / partial / incorrect / skipped counts.
+4. If they choose "Show me the answer", reveal the reference answer.
+5. If they skip, move on without showing the answer.
+6. **After resolving each question** (whether answered, revealed, or skipped), use `AskUserQuestion` to ask: "Want to discuss this more, or move on?" with options:
+   - "Let's discuss more"
+   - "Next question"
+   If the user wants to discuss, have a free-form conversation about the topic until they're satisfied, then move to the next question.
+7. Track: correct / partial / incorrect / skipped counts.
 
 ### For code challenges:
 
 1. Present the challenge title and description, prefixed with its number (e.g., "**C1:**").
 2. If the challenge references a file, mention it: "This challenge works with `<file path>`."
-3. Use `AskUserQuestion` with these options:
-   - "I'll try it — give me a moment" (proceed to evaluation after they respond again)
-   - "Give me a hint first"
-   - "Show me the solution"
-   - "Skip this challenge"
+3. Use `AskUserQuestion` with these options in this order:
+   1. "I'll try it — give me a moment" (proceed to evaluation after they respond again)
+   2. "Give me a hint first"
+   3. "Show me the solution"
+   4. "Skip this challenge"
 4. If they ask for a hint, show it, then ask again if they want to try or see the solution.
 5. If they attempt it (respond with code or a description of their approach):
    - Compare their approach against the reference solution.
    - Point out what they got right and what could be improved.
    - Show the reference solution for comparison.
-6. Track: attempted / completed / hint-used / skipped counts.
+6. **After resolving each challenge** (whether attempted, solution shown, or skipped), use `AskUserQuestion` to ask: "Want to discuss this more, or move on?" with options:
+   - "Let's discuss more"
+   - "Next challenge"
+   If the user wants to discuss, have a free-form conversation about the topic until they're satisfied, then move to the next challenge.
+7. Track: attempted / completed / hint-used / skipped counts.
 
 ## Phase 5: Summary
 
